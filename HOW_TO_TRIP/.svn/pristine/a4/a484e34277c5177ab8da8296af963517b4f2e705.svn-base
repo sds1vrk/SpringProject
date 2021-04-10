@@ -1,0 +1,134 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <title>여행장소고르기</title>
+<link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />  
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>  
+<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>  
+    
+<style>
+@import url(//fonts.googleapis.com/earlyaccess/hanna.css);
+font{font-family: "hanna"; font-size: 20pt;}
+input[type="checkbox"]{
+font-family: "hanna";
+}
+  table {
+    width: 100%;
+    border: 0px;
+    border-collapse: collapse;
+    font-family: "hanna";
+  }
+  th, td {
+    border: 0px solid #444444;
+    padding: 15px;
+  }
+  caption {
+   height: 60px;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 52px;
+    border-bottom: 5px solid #FFF;
+    -webkit-border-radius: 8px 8px 0 0;
+    -moz-border-radius: 8px 8px 0 0;
+    border-radius: 8px 8px 0 0;
+    background: #FFD8D8;
+    font-style: italic;
+    color: white;
+    
+  }
+  
+  caption:before {
+    content: '';
+    display: block;
+    height: 8px;
+    -webkit-border-radius: 8px 8px 0 0;
+    -moz-border-radius: 8px 8px 0 0;
+    border-radius: 8px 8px 0 0;
+    background-color: #FFD8D8;
+}
+  
+</style>
+ <script type="text/javascript">
+	 function sendToParent(){
+		 var lists = [];
+		  $("input[name='lang']:checked").each(function(i){   //jQuery로 for문 돌면서 check 된값 배열에 담는다
+		   lists.push($(this).val());
+		  });
+		  
+		  $.ajax({
+			  type:"post", 			// post방식으로 전송
+			  data:{'lang':lists},
+			  url:"main.jsp", 
+			  contentType:"application/x-www-form-urlencoded;charset=utf-8", //한글 깨짐 방지
+			  cache: false, 
+			  success:function(data) { 
+				  $("#target",opener.document).val(lists);
+	        	 	self.close(); // 변경 후 자식 창을 받아줍니다.
+		     }
+		  });
+	 }
+		
+	 function oneCheckbox(a) {
+			var obj = document.getElementsByName("lang");
+			for (var i = 0; i < obj.length; i++) {
+				if (obj[i] != a) {
+					obj[i].checked = false;
+				}
+			}
+		}
+	</script>
+	
+  </head>
+  <body>
+  <form id="box" method="post" action="">
+	<table>
+	<caption>주요 여행지</caption>
+		<thead>
+			<tr>
+				<th>유럽</th>
+				<th>아시아</th>
+				<th>호주</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input name="lang" type="checkbox" value="프랑스" onclick="oneCheckbox(this)">프랑스</td>
+				<td><input name="lang" type="checkbox" value="한국" onclick="oneCheckbox(this)">한국</td>
+				<td><input name="lang" type="checkbox" value="멜버른" onclick="oneCheckbox(this)">멜버른</td>
+			</tr>
+			<tr>
+				<td><input name="lang" type="checkbox" value="영국" onclick="oneCheckbox(this)">영국</td>
+				<td><input name="lang" type="checkbox" value="일본" onclick="oneCheckbox(this)">일본</td>
+				<td><input name="lang" type="checkbox" value="캔버라" onclick="oneCheckbox(this)">캔버라</td>
+			</tr>
+			<tr>
+				<td><input name="lang" type="checkbox" value="스위스" onclick="oneCheckbox(this)">스위스</td>
+				<td><input name="lang" type="checkbox" value="중국" onclick="oneCheckbox(this)">중국</td>
+				<td><input name="lang" type="checkbox" value="시드니" onclick="oneCheckbox(this)">시드니</td>
+			</tr>
+			<tr>
+				<td><input name="lang" type="checkbox" value="이탈리아" onclick="oneCheckbox(this)">이탈리아</td>
+				<td><input name="lang" type="checkbox" value="베트남" onclick="oneCheckbox(this)">베트남</td>
+				<td><input name="lang" type="checkbox" value="기타1" onclick="oneCheckbox(this)">기타1</td>
+			</tr>
+			<tr>
+				<td><input name="lang" type="checkbox" value="체코" onclick="oneCheckbox(this)">체코</td>
+				<td><input name="lang" type="checkbox" value="홍콩" onclick="oneCheckbox(this)">홍콩</td>
+				<td><input name="lang" type="checkbox" value="기타2" onclick="oneCheckbox(this)">기타2</td>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	<center>
+	<input style="width:50px;height:40px; border:0;border-radius:5px;color:white;font-size:13pt;  font-family: 'hanna'; background-color: #FFD8D8;" type="button" value="전송" onclick="sendToParent();" >
+	</center>
+</form>	
+	
+</body>
+</html>

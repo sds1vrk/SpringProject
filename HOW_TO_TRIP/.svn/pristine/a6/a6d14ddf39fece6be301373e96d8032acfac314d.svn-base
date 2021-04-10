@@ -1,0 +1,70 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR" import="story.*,java.util.*"%>
+<%
+	String strSnap=request.getParameter("snapno");
+	String strStoryno=request.getParameter("storyno");
+	int snapno;
+	if(strSnap==null) 
+		snapno=1;
+	else 
+		snapno=Integer.parseInt(strSnap);
+	
+	int storyno=Integer.parseInt(strStoryno);
+	SnapVO vo=new SnapVO();
+	StoryDAO dao=StoryDAO.newInstance();
+	vo=dao.snapDetailData(snapno);
+	
+	List<CommentVO> list=new ArrayList();
+	list=dao.getComment(snapno);
+	
+	pageContext.setAttribute("storyno", storyno);
+%>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+	<title>Insert title here</title>
+	<link rel="stylesheet"
+	href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
+</head>
+
+<body topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
+		
+				<div style="margin-left:0px !important;padding-left:0px !important;   width: 400px !important; height: 550px !important; float:left;">
+					<img src="<%=vo.getPath()%>"  style="margin-left:0px !important;padding-left:0px !important;   width: 400px !important; height: 100% !important;">
+					<br/><p align="left"><%=vo.getSnapcontent() %></p>
+				</div>
+				<div style="width: 280px; height: 550; float:left; margin-left:0px;">
+					<table>
+						<%
+							for(int i=0; i<list.size(); i++) {
+								%>
+								<tr style="margin-top: 2; margin-left: 0;">
+									<td>
+										<b><%=list.get(i).getId() %></b>
+										&nbsp;&nbsp;
+										<%=list.get(i).getCommentContent() %>
+									</td>
+								</tr>
+								<%
+							}
+						%>
+					</table>
+				</div>
+				<hr/>
+				<div style="position: absolute; top: 500px; left: 410px;">
+					
+					<form method="post" action="../register/comment_ok.jsp">
+						<input type="text" placeholder="댓글달기.." 
+						name="comment" size="20" align="center" required>
+						<input type="hidden" name="storyno" value=<%=storyno %>>
+						<input type="hidden" name="snapno" value=<%=snapno %>>
+						<button type="submit" class="btn btn-primary">댓글달기</button>
+					</form>
+				</div>		
+</body>
+
+</html>

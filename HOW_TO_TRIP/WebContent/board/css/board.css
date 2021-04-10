@@ -1,0 +1,29 @@
+@charset "EUC-KR";
+
+body {
+	background-color: white;
+}
+
+#st_table {
+	width:1000px;
+	align:center;
+	border:2px;
+}
+
+#addTable {
+	width:1000px;
+	align:center;
+	border:2px;
+}
+
+#st_table td{
+	width:20%;
+	align:left;
+	padding: 1px;
+}
+
+#addTable td{
+	width:20%;
+	align:left;
+	padding: 1px;
+}

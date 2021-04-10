@@ -1,0 +1,90 @@
+<%@page import="org.json.simple.JSONArray"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@page import="org.json.simple.JSONObject,java.io.PrintWriter,java.util.*,java.io.PrintWriter,story.*"%>
+<%
+/* JSONObject jsonObject= new JSONObject();
+JSONObject jsonObject2= new JSONObject();
+StoryDAO dao=new StoryDAO();
+List<SnapVO> slist=dao.snapAllData(Integer.parseInt(storyno));
+List<Object> list=new ArrayList<Object>();
+List<Object> clist=new ArrayList<Object>();
+for(SnapVO vo:slist){
+	HashMap<String,String> map=new HashMap<String,String>();
+	map.put("img", vo.getPath());
+	map.put("content",vo.getSnapcontent());
+	map.put("storyno",String.valueOf(vo.getStoryno()));
+	map.put("snapno",String.valueOf(vo.getSnapno()));
+	
+	list.add(map);
+	
+	List<CommentVO> commlist=new ArrayList();
+	commlist=dao.getComment(vo.getSnapno());
+	for(CommentVO cvo: commlist) {
+		HashMap<String,String> cmap=new HashMap<String,String>();
+		cmap.put("id",cvo.getId());
+		cmap.put("comment",cvo.getCommentContent());
+		clist.add(cmap);
+		}
+	}
+JSONArray jsonArray =new JSONArray();
+jsonArray.add(jsonObject.put("snaplist",list));
+jsonArray.add(jsonObject2.put("commlist",clist));
+out.print(jsonObject);
+out.print(jsonObject2);
+System.out.println(jsonObject);
+System.out.println(jsonObject2); */
+String storyno=request.getParameter("storyno");
+
+System.out.println(storyno);
+StoryDAO dao=new StoryDAO();
+List<SnapVO> slist=dao.snapAllData(Integer.parseInt(storyno));
+for(SnapVO vo:slist) {
+	vo.setClist(dao.getComment(vo.getSnapno()));
+}
+int snapno=slist.get(0).getSnapno();
+%>
+<%
+	for(SnapVO svo:slist) {
+%>
+		<div>
+			<div style="float:left;">
+				<img src="<%=svo.getPath()%>" style="margin-left:0px !important;padding-left:0px !important; width:500px; height:500px; ">
+				<br/><p align="left"><%=svo.getSnapcontent() %></p>
+				<br/><a href="../delete/delete.jsp?storyno=<%=storyno%>"><button align="left">글 삭제</button></a>
+				<a href="../update/updateStory.jsp?storyno=<%=storyno%>"><button align="left">글 수정</button></a>
+			</div>
+			<div style=" float:left; margin-left:0px;">
+				<table>
+					<%
+						for(int i=0; i<svo.getClist().size(); i++) {
+							%>
+							<tr style="margin-top: 2; margin-left: 0;">
+								<td>
+									<b><%=svo.getClist().get(i).getId() %></b>
+									&nbsp;&nbsp;
+									<%=svo.getClist().get(i).getCommentContent() %>
+								</td>
+							</tr>
+							<%
+						}
+					%>
+				</table>
+			</div>
+			<hr/>
+			<div style="position: absolute; top: 520px; left: 530px;">			
+				<form method="post" action="../register/comment_ok.jsp">
+					<input type="text" placeholder="댓글달기.." 
+					name="comment" size="20" align="center" required>
+					<input type="hidden" name="storyno" value=<%=storyno %>>
+					<input type="hidden" name="snapno" value=<%=snapno %>>
+					<button type="submit" class="btn btn-primary">댓글달기</button>
+				</form>
+			</div>
+		</div>
+<%
+	}
+%>
+	
+	
+	

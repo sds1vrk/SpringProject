@@ -1,0 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR" import="email.*"%>
+<%
+
+	request.setCharacterEncoding("utf-8");
+	String email = request.getParameter("email");
+	EmailCheck em=new EmailCheck();
+	String authNum=em.RandomNum();
+	em.sendEmail(email, authNum);
+%>   
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+<script src="http:////code.jquery.com/jquery-1.8.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+</head>
+<body>
+	<center>
+	<%=authNum %> 
+	<font>인증번호</font><br>
+	<input class="form-control" type="text" id="email" value="" width="30px;" >
+	<input class="btn btn-primary"  type="button" value="인증">
+	</center>
+</body>
+</html>

@@ -1,0 +1,12 @@
+
+<%@page import="org.json.simple.JSONArray"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@page import="org.json.simple.JSONObject,java.io.PrintWriter,java.util.*,java.io.PrintWriter,story.*"%>
+<%
+String rs=request.getParameter("rs");
+JSONObject jsonObject= new JSONObject();
+jsonObject.put("rs",rs);
+out.print(jsonObject);
+System.out.println(jsonObject);
+%>

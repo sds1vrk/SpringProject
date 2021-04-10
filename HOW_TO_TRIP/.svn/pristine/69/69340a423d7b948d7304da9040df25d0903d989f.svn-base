@@ -1,0 +1,130 @@
+<%@page import="story.CodeToCountry"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR" import="trip.* "%>
+<%
+	request.setCharacterEncoding("EUC-KR");
+	CalenderDAO dao=CalenderDAO.newInstance();
+	CalenderVO vo=new CalenderVO();
+	String year = request.getParameter("year");
+	String month = request.getParameter("month");
+	String day = request.getParameter("day");
+	String loginID=(String)session.getAttribute("id");
+	vo=dao.modeView(year,month,day, loginID);
+	String country=vo.getCountry();
+	pageContext.setAttribute("country", country);
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../country-select-js-master/build/css/countrySelect.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="../country-select-js-master/build/js/countrySelect.min.js"></script>
+<style type="text/css">
+@import url(//fonts.googleapis.com/earlyaccess/hanna.css);
+<!--
+A:link{font-size:9pt;  font-family: "hanna"; text-decoration:none;color:#3E3E3E}
+A:visited{font-size:9pt;  font-family: "hanna"; text-decoration:none;color:#3E3E3E}
+A:hover {font-size: 9pt;  font-family: "hanna"; text-decoration: underline;color: #F29708;}
+font{font-family: "hanna"; font-size: 20pt;}
+.title {font-size: 9pt;  font-family: "hanna"; color:#504F4F}
+-->
+button{font-family:"hanna";width: 50px;height: 30px;background-color: #FFD8D8; border-color:#FFD8D8; border-radius: 10px;}
+</style>
+</head>
+<body LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+<br><br><br><br><br>
+<form method="post"  name="diaryInput" action="update_ok.jsp" onsubmit="return checkfield()">
+	<br>
+	<table width="300" height="200" border="0" cellspacing="0" cellpadding="0" align="center">
+		<tr>
+			<td align="center" valign="top" >
+			
+			
+				<table width="300" height="200" border="0" cellspacing="0" cellpadding="0" align="center">
+					
+					
+					<tr>
+						<td width="300" height="5"></td>
+					</tr>
+					<tr>
+						<td width="300" height="3" bgcolor="#FFD8D8"></td>
+					</tr>
+					<tr>
+						<td width="300" height="2" bgcolor="#FFD8D8"></td>
+					</tr>
+					<tr>		
+						<td width="300" height="20" align="left" class="title">
+							<input type="hidden" name="year" value="<%= year %>" >
+							<input type="hidden" name="month" value="<%= month %>">
+							<input type="hidden" name="day" value="<%= day %>">
+							&nbsp;<font><%= year %>년 <%= month %>월 <%= day %>일</font>
+						</td>
+					</tr>
+					<tr>
+						<td width="300" height="20" align="left" class="title">&nbsp;<font>여행국가</font>&nbsp;
+						<div class="form-item">
+								<input class="form-control" id="country_selector" type="text">
+							</div>
+							<div class="form-item" style="display:none;">
+								<input class="form-control" type="text" id="country_selector_code" name="country_selector_code" data-countrycodeinput="1" readonly="readonly" placeholder="Selected country code will appear here" />
+						</div>
+						</td>
+					</tr>
+					<tr>
+						<td width="300" height="20" align="left" class="title"><font>숙소 :</font>&nbsp;
+						<input style="width:80px; height:30px;" type="text" name="resort"maxlength="30" class="resort" value="<%=vo.getResort() %>" autofocus>
+						</td>
+					</tr>
+					<tr>
+						<td width="300" height="20" align="left" class="title"><font>관광지 :</font>&nbsp;
+						<input style="width:80px; height:30px;" type="text" name="place"size="12" maxlength="30" class="place" value="<%=vo.getPlace() %>"  autofocus>
+						</td>
+					</tr>
+				</table>
+				<table width="300"  height="25" border="0" cellspacing="0" cellpadding="0" align="center">
+					
+					
+					<tr>
+						<td width="300" height="20" align="center">
+							<input type="hidden" name ="id" value="<%= loginID %>">
+							<input id="button" type = "submit" value="전송">
+							<input id="button" type = "button" value="취소" onClick="location='calendar.jsp'">			
+						</td>
+					</tr>
+					<tr>
+						<td width="300" height="1" bgcolor="#FFD8D8"></td>
+					</tr>
+					<tr>
+						<td wdith="300" height="2" bgcolor="#FFD8D8"></td>
+					</tr>
+					
+				</table>
+	
+			</td>
+		</tr>
+	</table>
+</form>
+</body>
+</html>
+<script type="text/javaScript">
+		// CheckField
+		function checkfield() {
+			//숙소입력여부 체크
+			if (document.diaryInput.resort.value == "") {
+				alert("숙소를 입력하지 않았습니다.")
+				document.diaryInput.resort.focus()
+				return false;
+			}
+			//관광지입력여부 체크
+			if (document.diaryInput.place.value == "") {
+				alert("관광지를 입력하지 않았습니다.")
+				document.diaryInput.place.focus()
+				return false;
+			}
+		};
+		$("#country_selector").countrySelect({
+			defaultCountry: "<%=country %>"
+		});
+</script>

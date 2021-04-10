@@ -1,0 +1,177 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR" import="java.util.*,story.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+	request.setCharacterEncoding("EUC-KR");
+	String id=(String)session.getAttribute("id");
+	
+	String strStoryno=request.getParameter("storyno");
+	if(strStoryno==null)
+		strStoryno="0";
+	
+	int storyno=Integer.parseInt(strStoryno);
+	
+	StoryDAO dao=StoryDAO.newInstance();
+	List<StoryVO> list=dao.storyUserData(id);
+	List<SnapVO> slist=dao.snapAllData(storyno);
+	
+%>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="../css/hover.css">
+	<link rel="stylesheet" href="../css/jquery.bxslider.css">
+	<link rel="stylesheet" href="../css/board.css" /> 
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  	<script src="../js/jquery.bxslider.min.js"></script>
+	
+	<style type="text/css">
+		#profile {
+			width: 100px;
+  			height:100px;
+  			border-radius: 50px;
+  			border=1px;
+  			}
+  		#mask {  
+		  position:absolute;  
+		  left:0;
+		  top:0;
+		  background-color: #000;   
+		  display: none;  
+		  z-index: 0;
+		}
+		.dataTd:HOVER {
+			background-color: yellow;
+			cursor: pointer;
+			cursor: hand;
+		}
+	</style>
+</head>
+<script>
+	$(".hover").mouseleave(
+			  function () {
+			    $(this).removeClass("hover");
+			  }
+			);
+	$(window).scroll(function () { var scrollValue = $(document).scrollTop(); });
+	
+	function wrapWindowByMask(){
+	    //화면의 높이와 너비를 구한다.
+	    var maskHeight = $(document).height();  
+	    var maskWidth = $(window).width();  
+	
+	    //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+	    $('#mask').css({'width':maskWidth,'height':maskHeight});  
+	
+	    //애니메이션 효과
+	    $('#mask').fadeIn(0);      
+	    $('#mask').fadeTo("slow",0.6);  
+	    $('.slider').show();
+	};
+	
+	$(function(){
+		if(<%=storyno%>!=0){
+			wrapWindowByMask();
+			
+			$('.slider').bxSlider({
+				slideWidth:800 , 
+				margin:0,
+				adaptiveHeight: false,
+				infiniteLoop: false,	//무한루프 방ㅈ
+				hideControlOnEnd: true, //끝에서 버튼 안보임
+				moveSlides:1,
+				touchEnabled:false
+				}); 
+				
+			$('.slider').bxSlider();
+		}
+	});
+	
+	$(function(){
+		
+		$('.window .close').click(function (e) {  
+		    //링크 기본동작은 작동하지 않도록 한다.
+		    e.preventDefault();  
+		    $('#mask, .window').hide();
+		});       
+
+		//검은 막을 눌렀을 때
+		$('#mask').click(function () {  
+		    $(this).hide();  
+		    $('.slider').hide();
+		    $('.bx-viewport').hide();
+		    $('.bx-wrapper').hide();
+		});
+	});
+	
+</script>
+<body>
+	<center style="background-color: white;">
+
+		 <div id="mask"></div>
+		 <div class="slider">
+				<%for(int i=0; i<slist.size(); i++) { 
+				%>
+					<div>
+						<jsp:include page="snapPage(my).jsp">
+							<jsp:param value="<%=slist.get(i).getSnapno() %>" name="snapno"/>
+							<jsp:param value="<%=slist.get(i).getStoryno() %>" name="storyno"/>
+						</jsp:include>
+					</div>
+				<%} 
+				%>
+		</div>
+		
+		<table>
+			<tr>
+				<td>
+					<a href="../register/registerStory.jsp">게시글 작성</a>
+				</td>
+			</tr>
+			<%
+			int j=0;
+			int k=0;
+			for(int i=0; i<Math.ceil((double)list.size()/4); i++) {
+				%>
+				<tr>
+					<%
+						if(i==0) {
+							j=0;
+							k=j+4;
+						} else {
+							k=j+4;
+						}
+					%>
+					<%
+					for(;j<k&&j<list.size(); j++) {
+						%>
+						<td>
+							<figure class="snip1384">
+										<img alt="sample83" src="<%=list.get(j).getPath()%>" 
+										width="300" height="300">
+								<figcaption>
+									<center>
+									<h3 style="vertical-align:middle;"><%=list.get(j).getStoryname() %></h3>
+									</center>
+									<i class="ion-ios-arrow-right"></i>
+								</figcaption>
+									<a href="myStory.jsp?id=<%=id%>&storyno=<%=list.get(j).getStoryno() %>"></a>
+							</figure>
+						</td>
+						<%
+					}
+					%>
+				</tr>
+				<%
+			}
+			%>
+		</table>
+	</center>
+</body>
+</html>
