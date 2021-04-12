@@ -11,7 +11,7 @@
 
 
 ## 사용 기술
-Framework : Spring, Bootstrap
-Application Server : Apache Tomcat
-Database : Oracle
-Development Languages : JAVA, JSP, JQuery, HTML, CSS, JS
+- Framework : Spring, Bootstrap
+- Application Server : Apache Tomcat
+- Database : Oracle
+- Development Languages : JAVA, JSP, JQuery, HTML, CSS, JS
