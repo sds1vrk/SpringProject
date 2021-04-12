@@ -10,3 +10,8 @@
  - 동해자 찾기 : 캘린더
 
 
+## 사용 기술
+Framework : Spring, Bootstrap
+Application Server : Apache Tomcat
+Database : Oracle
+Development Languages : JAVA, JSP, JQuery, HTML, CSS, JS
